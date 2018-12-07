@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">基础Demo</string>
+    <string name="dialer">简易电话拨号器</string>
+    <string name="click_to_call">Click to Call</string>
+    <string name="input_phone_num">请输入电话号码</string>
+</resources>
