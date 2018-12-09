@@ -27,7 +27,7 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        jobUnderPermission(Manifest.permission.CALL_PHONE, CALL_PHONE_REQ);
+        requestPermissionForJob(Manifest.permission.CALL_PHONE, CALL_PHONE_REQ);
     }
 
     @Override

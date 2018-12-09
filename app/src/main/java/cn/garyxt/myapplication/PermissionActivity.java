@@ -12,8 +12,9 @@ import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 /**
- * if you activity need to do some job that request some permission
- * you can make you activity extend this class.
+ * if your activity need to do some job that request a permission
+ * you can make your activity extend this class.<br/>
+ * then you just need to call {@link #requestPermissionForJob(String, int)} and implement {@link #performJob(int)}
  */
 
 public abstract class PermissionActivity extends BaseActivity {
@@ -21,11 +22,10 @@ public abstract class PermissionActivity extends BaseActivity {
     private static final int FLAG_SETTINGS_PERMISSION = 0x2;
 
     /**
-     * if you should do some job that request some permission <br/>
-     * you should call {@link #jobUnderPermission(String, int)} first <br/>
+     * you should call {@link #requestPermissionForJob(String, int)} first <br/>
      * and at the same time implement this method to do the actual job.
      *
-     * @param REQ_CODE requestCode for {@link #onRequestPermissionsResult(int requestCode, String[], int[])}
+     * @param REQ_CODE  parameter 'requestCode' passed by {@link #onRequestPermissionsResult(int requestCode, String[], int[])}
      */
     protected abstract void performJob(final int REQ_CODE);
 
@@ -36,9 +36,9 @@ public abstract class PermissionActivity extends BaseActivity {
      * you should implement {@link #performJob(int)} at the same time and do the actual work in the method.
      *
      * @param permission permission required to do job.
-     * @param JOB_CODE   requestCode for {@link ActivityCompat#requestPermissions(Activity, String[], int requestCode)}
+     * @param JOB_CODE   parameter 'requestCode' for {@link ActivityCompat#requestPermissions(Activity, String[], int requestCode)}
      */
-    protected void jobUnderPermission(String permission, final int JOB_CODE) {
+    protected void requestPermissionForJob(String permission, final int JOB_CODE) {
         // BEGIN 动态权限申请代码段
         int hasCallPhonePermission = ContextCompat.checkSelfPermission(this, permission);
         if (hasCallPhonePermission == PackageManager.PERMISSION_GRANTED) {
