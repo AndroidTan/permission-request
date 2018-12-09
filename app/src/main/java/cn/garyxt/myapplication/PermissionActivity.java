@@ -1,6 +1,5 @@
 package cn.garyxt.myapplication;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +24,7 @@ public abstract class PermissionActivity extends BaseActivity {
      * if you should do some job that request some permission <br/>
      * you should call {@link #jobUnderPermission(String, int)} first <br/>
      * and at the same time implement this method to do the actual job.
+     *
      * @param REQ_CODE requestCode for {@link #onRequestPermissionsResult(int requestCode, String[], int[])}
      */
     protected abstract void performJob(final int REQ_CODE);
@@ -36,7 +36,7 @@ public abstract class PermissionActivity extends BaseActivity {
      * you should implement {@link #performJob(int)} at the same time and do the actual work in the method.
      *
      * @param permission permission required to do job.
-     * @param JOB_CODE requestCode for {@link ActivityCompat#requestPermissions(Activity, String[], int requestCode)}
+     * @param JOB_CODE   requestCode for {@link ActivityCompat#requestPermissions(Activity, String[], int requestCode)}
      */
     protected void jobUnderPermission(String permission, final int JOB_CODE) {
         // BEGIN 动态权限申请代码段
@@ -61,25 +61,25 @@ public abstract class PermissionActivity extends BaseActivity {
         } else {
             // 没有授权
             if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    PermissionActivity.this, Manifest.permission.CALL_PHONE)) {
+                    PermissionActivity.this, permissions[0])) {
                 // 没有点选“不再提示”
-                showPermissionDialog(FLAG_REQUEST_PERMISSION, requestCode);
+                showPermissionDialog(FLAG_REQUEST_PERMISSION, requestCode, permissions);
             } else {
                 // 点选了“不再提示”
-                showPermissionDialog(FLAG_SETTINGS_PERMISSION, requestCode);
+                showPermissionDialog(FLAG_SETTINGS_PERMISSION, requestCode, permissions);
             }
         }
     }
     // END
 
-    private void showPermissionDialog(final int flag, final int requestCode) {
+    private void showPermissionDialog(final int flag, final int requestCode, final String[] permissions) {
         new AlertDialog.Builder(this).setTitle("授权提示")
-                .setMessage("需要授予拨打电话权限才能打电话。")
+                .setMessage("需要授予相关权限才能执行操作。\n" + permissions[0])
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 用户取消了授权，整个路程结束，不执行任何操作。
-                        Toast.makeText(PermissionActivity.this, "取消拨打电话", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PermissionActivity.this, "取消操作", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setPositiveButton("去授权", new DialogInterface.OnClickListener() {
@@ -89,7 +89,7 @@ public abstract class PermissionActivity extends BaseActivity {
                             case FLAG_REQUEST_PERMISSION:
                                 // 用户之前没有点击“不再提示”，但是此处选在继续授权的分支
                                 ActivityCompat.requestPermissions(PermissionActivity.this,
-                                        new String[]{Manifest.permission.CALL_PHONE}, requestCode);
+                                        permissions, requestCode);
                                 break;
                             case FLAG_SETTINGS_PERMISSION:
                                 // 用户之前点击过“不再提示”，此处选择继续授权的分支
