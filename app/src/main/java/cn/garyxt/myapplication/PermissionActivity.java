@@ -1,6 +1,7 @@
 package cn.garyxt.myapplication;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,19 +12,31 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
+/**
+ * if you activity need to do some job that request some permission
+ * you can make you activity extend this class.
+ */
+
 public abstract class PermissionActivity extends BaseActivity {
     private static final int FLAG_REQUEST_PERMISSION = 0x1;
     private static final int FLAG_SETTINGS_PERMISSION = 0x2;
 
+    /**
+     * if you should do some job that request some permission <br/>
+     * you should call {@link #jobUnderPermission(String, int)} first <br/>
+     * and at the same time implement this method to do the actual job.
+     * @param REQ_CODE requestCode for {@link #onRequestPermissionsResult(int requestCode, String[], int[])}
+     */
     protected abstract void performJob(final int REQ_CODE);
 
     // BEGIN 动态权限申请回调代码段
 
     /**
      * check permission and do the job which require this permission <br/>
-     * you should implement performJob() at the same time and do the actual work in the method.
+     * you should implement {@link #performJob(int)} at the same time and do the actual work in the method.
      *
      * @param permission permission required to do job.
+     * @param JOB_CODE requestCode for {@link ActivityCompat#requestPermissions(Activity, String[], int requestCode)}
      */
     protected void jobUnderPermission(String permission, final int JOB_CODE) {
         // BEGIN 动态权限申请代码段
